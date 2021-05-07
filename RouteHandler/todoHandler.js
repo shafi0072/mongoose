@@ -9,7 +9,20 @@ const Todo = new mongoose.model("Todo", todoSchema)
 // get all todos
 
 router.get('/', async(req, res) => {
+    await Todo.find((err, data) => {
+        if(err){
+            res.status(500).json({
+                error: "there was a server site error"
+            })
 
+        }
+        else{
+            res.status(200).json({
+                result: data,
+                message: "Todo Was find successfully"
+            })
+        }
+    })
 });
 
 //  get a todo 
@@ -55,7 +68,24 @@ router.post('/all', async(req, res) =>{
 // update todo
 
 router.put('/:id', async(req, res) => {
-
+    await Todo.updateOne({_id: req.params.id}, {
+        $set: {
+            status:"inactive"
+        }
+    }, (err) => {
+       
+            if(err){
+                res.status(500).json({
+                    error: "there was a server site error"
+                })
+    
+            }
+            else{
+                res.status(200).json({
+                    message: "Todo Was updated successfully"
+                })
+            }
+    })
 })
 // delete todo
 
